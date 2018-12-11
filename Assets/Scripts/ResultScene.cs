@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class ResultScene : MonoBehaviour
 {
     [SerializeField] Text text;
+    [SerializeField] AudioSource audioSource;
 
     // Use this for initialization
     void Start()
@@ -14,6 +15,8 @@ public class ResultScene : MonoBehaviour
         var scoreManager = ScoreManagerSingleton.Instance;
         text.text = string.Format("あなたのチャレンジ結果は{0}回中{1}回成功\n所要時間{2:0.00}秒でした"
                                  , scoreManager.GameCount, scoreManager.ClearCount, scoreManager.TotalTimeOnClear);
+        audioSource.clip = Resources.Load<AudioClip>("Audio/result");
+        audioSource.Play();
     }
 
     // Update is called once per frame

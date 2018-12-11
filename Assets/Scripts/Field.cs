@@ -19,10 +19,13 @@ public class Field : MonoBehaviour
     [SerializeField] TextMeshProUGUI ratioText;
     [SerializeField] TextMeshProUGUI timeText;
     [SerializeField] TextMeshProUGUI roundText;
+    [SerializeField] AudioSource audioSource;
 
     public Action<List<SpriteRenderer>> OnCounterCreated;
     public Action OnGameEnd;
 
+    AudioClip missAudio;
+    AudioClip rightAudio;
     List<SpriteRenderer> counters;
     Border border;
     bool clicked;
@@ -49,6 +52,12 @@ public class Field : MonoBehaviour
         var scoreManager = ScoreManagerSingleton.Instance;
         scoreManager.StartNewGame();
         roundText.text = string.Format("Round\n{0}/{1}", scoreManager.GameCount, scoreManager.MaxGameCount);
+
+        audioSource.clip = Resources.Load<AudioClip>("Audio/countdown");
+        audioSource.Play();
+
+        missAudio = Resources.Load<AudioClip>("Audio/mistake");
+        rightAudio = Resources.Load<AudioClip>("Audio/right2");
     }
 
     // Update is called once per frame
@@ -78,13 +87,16 @@ public class Field : MonoBehaviour
         border.CheckResult(counters, (_firstHalfCount) =>
         {
             ratioText.text = string.Format("<color=blue>{0}</color>:<color=red>{1}</color>", _firstHalfCount, counters.Count - _firstHalfCount);
+            audioSource.Stop();
             if (_firstHalfCount * 2 == counters.Count)
             {
                 ScoreManagerSingleton.Instance.ClearGame(seconds);
+                audioSource.PlayOneShot(rightAudio);
             }
             else
             {
                 GetComponent<CinemachineImpulseSource>().GenerateImpulse();
+                audioSource.PlayOneShot(missAudio);
             }
 
             if (OnGameEnd != null)
