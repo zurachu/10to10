@@ -36,3 +36,4 @@ sysinfo.txt
 *.unitypackage
 Assets/TextMesh Pro/Documentation
 WebGL
+Assets/Resources/Audio/*.mp3*
