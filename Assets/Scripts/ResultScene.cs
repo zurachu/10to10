@@ -47,6 +47,7 @@ public class ResultScene : MonoBehaviour
         var statisticValue = ScoreManagerSingleton.Instance.Score.StatisticValue;
         var myEntry = leaderboardEntries.Find(_entry => _entry.PlayFabId == PlayFabLoginManagerSingleton.Instance.PlayFabId);
         if (myEntry != null && myEntry.StatValue < statisticValue
+            || myEntry == null && leaderboardEntries.Count < LeaderboardRequester.MaxEntriesCount
             || myEntry == null && leaderboardEntries[leaderboardEntries.Count - 1].StatValue < statisticValue)
         {
             Debug.Log("Leaderboard does not updated yet.");

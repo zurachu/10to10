@@ -7,12 +7,14 @@ using UnityEngine;
 
 public class LeaderboardRequester : MonoBehaviour
 {
+    public static readonly int MaxEntriesCount = 10;
+
     public void Request(Action<List<PlayerLeaderboardEntry>> onReceiveLeaderboard)
     {
         var connectingView = ConnectingView.Show();
 
         var request = new GetLeaderboardRequest {
-            MaxResultsCount = 10,
+            MaxResultsCount = MaxEntriesCount,
             StatisticName = Score.StatisticName,
         };
         PlayFabClientAPI.GetLeaderboard(
