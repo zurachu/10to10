@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-
-public class ScoreManagerSingleton
+﻿public class ScoreManagerSingleton
 {
     static ScoreManagerSingleton instance;
 
     int gameCount;
+    Score score;
     int clearCount;
     float totalTimeOnClear;
 
@@ -24,7 +23,7 @@ public class ScoreManagerSingleton
     {
         get
         {
-            return 10;
+            return Score.MaxGameCount;
         }
     }
 
@@ -36,27 +35,22 @@ public class ScoreManagerSingleton
         }
     }
 
-    public int ClearCount
+    public Score Score
     {
         get
         {
-            return clearCount;
-        }
-    }
-
-    public float TotalTimeOnClear
-    {
-        get
-        {
-            return totalTimeOnClear;
+            if (score == null)
+            {
+                score = new Score();
+            }
+            return score;
         }
     }
 
     public void Initialize()
     {
         gameCount = 0;
-        clearCount = 0;
-        totalTimeOnClear = 0f;
+        score = new Score();
     }
 
     public void StartNewGame()
@@ -66,7 +60,7 @@ public class ScoreManagerSingleton
 
     public void ClearGame(float time)
     {
-        clearCount++;
-        totalTimeOnClear += time;
+        score.ClearCount++;
+        score.TotalTimeOnClear += time;
     }
 }
