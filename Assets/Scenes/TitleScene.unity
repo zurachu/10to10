@@ -219,8 +219,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e568425e07d04ca18eb44df46873fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectingViewPrefab: {fileID: 114830701003422768, guid: bc71083b867624d8fa6a1c2bbe7d0e86,
-    type: 2}
 --- !u!1 &198908468
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,6 +384,7 @@ GameObject:
   - component: {fileID: 615691727}
   - component: {fileID: 615691726}
   - component: {fileID: 615691725}
+  - component: {fileID: 615691728}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -450,6 +449,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &615691728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 615691724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 960, y: 540}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
 --- !u!1 &646190939
 GameObject:
   m_ObjectHideFlags: 0
@@ -892,8 +912,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e568425e07d04ca18eb44df46873fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectingViewPrefab: {fileID: 114830701003422768, guid: bc71083b867624d8fa6a1c2bbe7d0e86,
-    type: 2}
 --- !u!114 &2110171006
 MonoBehaviour:
   m_ObjectHideFlags: 0
