@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using PlayFab;
+using PlayFab.ClientModels;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -46,8 +48,7 @@ public class InGameScene : MonoBehaviour
         }
         field.SetBorderType(borderType);
 
-        field.OnCounterCreated = (_counters) =>
-        {
+        field.OnCounterCreated = (_counters) => {
             if (8 <= gameCount)
             {
                 var counters = new List<SpriteRenderer>();
@@ -79,22 +80,60 @@ public class InGameScene : MonoBehaviour
             }
         };
 
-        field.OnGameEnd = () =>
-        {
-            StartCoroutine("GameEnd");
+        field.OnGameEnd = () => {
+            var scoreManager = ScoreManagerSingleton.Instance;
+            if (scoreManager.GameCount < scoreManager.MaxGameCount)
+            {
+                StartCoroutine("WaitAndNextGame");
+            }
+            else
+            {
+                UpdatePlayerStatistics(scoreManager.Score);
+            }
         };
     }
 
-    IEnumerator GameEnd()
+    IEnumerator WaitAndNextGame()
     {
         yield return new WaitForSeconds(1f);
-        if (ScoreManagerSingleton.Instance.GameCount < ScoreManagerSingleton.Instance.MaxGameCount)
-        {
-            StartNewGame();
-        }
-        else
-        {
-            SceneManager.LoadScene("ResultScene");
-        }
+        StartNewGame();
+    }
+
+    void UpdatePlayerStatistics(Score score)
+    {
+        var request = new UpdatePlayerStatisticsRequest {
+            Statistics = new List<StatisticUpdate>() {
+                new StatisticUpdate {
+                    StatisticName = Score.StatisticName,
+                    Value = score.StatisticValue
+                }
+            }
+        };
+        PlayFabClientAPI.UpdatePlayerStatistics(request, OnUpdateSuccess, OnUpdateFailure);
+    }
+
+    void OnUpdateSuccess(UpdatePlayerStatisticsResult result)
+    {
+        var request = result.Request as UpdatePlayerStatisticsRequest;
+        var statisticUpdate = request.Statistics[0];
+        Debug.Log(string.Format("{0}:{1}:{2}", statisticUpdate.StatisticName, statisticUpdate.Version, statisticUpdate.Value));
+
+        StartCoroutine("WaitAndResultScene");
+    }
+
+    IEnumerator WaitAndResultScene()
+    {
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("ResultScene");
+    }
+
+    void OnUpdateFailure(PlayFabError error)
+    {
+        var report = error.GenerateErrorReport();
+        Debug.LogError(report);
+
+        ErrorDialogView.Show("UpdatePlayerStatistics failed", report, () => {
+            UpdatePlayerStatistics(ScoreManagerSingleton.Instance.Score);
+        });
     }
 }

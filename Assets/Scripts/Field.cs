@@ -84,13 +84,15 @@ public class Field : MonoBehaviour
 
     void Result(Vector3 mousePosition)
     {
-        border.CheckResult(counters, (_firstHalfCount) =>
-        {
-            ratioText.text = string.Format("<color=blue>{0}</color>:<color=red>{1}</color>", _firstHalfCount, counters.Count - _firstHalfCount);
+        border.CheckResult(counters, (_firstHalfCount) => {
+            var scoreManager = ScoreManagerSingleton.Instance;
+            var secondHalfCount = counters.Count - _firstHalfCount;
+            ratioText.text = string.Format("<color=blue>{0}</color>:<color=red>{1}</color>", _firstHalfCount, secondHalfCount);
             audioSource.Stop();
-            if (_firstHalfCount * 2 == counters.Count)
+            var cleared = (_firstHalfCount * 2 == counters.Count);
+            if (cleared)
             {
-                ScoreManagerSingleton.Instance.ClearGame(seconds);
+                scoreManager.ClearGame(seconds);
                 audioSource.PlayOneShot(rightAudio);
             }
             else
@@ -98,6 +100,9 @@ public class Field : MonoBehaviour
                 GetComponent<CinemachineImpulseSource>().GenerateImpulse();
                 audioSource.PlayOneShot(missAudio);
             }
+
+            var result = string.Format("{0}:{1}", _firstHalfCount, secondHalfCount);
+            PlayFabPlayerEventManagerSingleton.Instance.RoundEnd(scoreManager.GameCount, cleared, seconds, result);
 
             if (OnGameEnd != null)
             {
