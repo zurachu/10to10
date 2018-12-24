@@ -74,7 +74,7 @@ public class ResultScene : MonoBehaviour
 #if UNITY_WEBGL
         naichilab.UnityRoomTweet.Tweet("10to10", message, "unityroom", "unity1week");
 #else
-        message += "\nPC: https://unityroom.com/games/10to10  #unityroom #unity1week";
+        message += "\nandroid: https://play.google.com/store/apps/details?id=com.zurachu.TenToTen\nPC: https://unityroom.com/games/10to10  #unityroom #unity1week";
         Application.OpenURL("http://twitter.com/intent/tweet?text=" + WWW.EscapeURL(message));
 #endif
     }
