@@ -71,6 +71,11 @@ public class ResultScene : MonoBehaviour
         var score = Score.FromStatistic(scoreManager.Score.StatisticValue);
         var message = string.Format("10:10 あなたのチャレンジ結果は{0}回中{1}回成功、所要時間{2:0.00}秒でした"
                                     , scoreManager.GameCount, score.ClearCount, score.TotalTimeOnClear);
+#if UNITY_WEBGL
         naichilab.UnityRoomTweet.Tweet("10to10", message, "unityroom", "unity1week");
+#else
+        message += "\nPC: https://unityroom.com/games/10to10  #unityroom #unity1week";
+        Application.OpenURL("http://twitter.com/intent/tweet?text=" + WWW.EscapeURL(message));
+#endif
     }
 }
