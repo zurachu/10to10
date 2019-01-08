@@ -38,8 +38,13 @@ public class ChangeDisplayNameView : MonoBehaviour
 
     public void OnValueChanged()
     {
-        displayNameInputField.text = displayNameInputField.text.Trim();
         okButton.interactable = (displayNameInputField.text.Length >= DisplayNameMinLength);
+    }
+
+    public void OnEndEdit()
+    {
+        displayNameInputField.text = displayNameInputField.textComponent.text;
+        OnValueChanged();
     }
 
     public void OnClickOk()

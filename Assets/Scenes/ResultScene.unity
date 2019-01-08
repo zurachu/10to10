@@ -574,8 +574,6 @@ MonoBehaviour:
   audioSource: {fileID: 478664089}
   leaderboardRequester: {fileID: 72322554}
   leaderboardView: {fileID: 526196979}
-  connectingViewPrefab: {fileID: 114830701003422768, guid: bc71083b867624d8fa6a1c2bbe7d0e86,
-    type: 2}
 --- !u!114 &72322554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,8 +585,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e568425e07d04ca18eb44df46873fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectingViewPrefab: {fileID: 114830701003422768, guid: bc71083b867624d8fa6a1c2bbe7d0e86,
-    type: 2}
 --- !u!1 &79087358
 GameObject:
   m_ObjectHideFlags: 0
@@ -1328,10 +1324,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 53183ef7622e44ee4a844d075808f464, type: 3}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -1839,8 +1835,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f5a5327822674d578e5d53cb548be2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectingViewPrefab: {fileID: 114830701003422768, guid: bc71083b867624d8fa6a1c2bbe7d0e86,
-    type: 2}
 --- !u!1 &530713478
 GameObject:
   m_ObjectHideFlags: 0
@@ -2345,6 +2339,7 @@ GameObject:
   - component: {fileID: 615691727}
   - component: {fileID: 615691726}
   - component: {fileID: 615691725}
+  - component: {fileID: 615691728}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -2412,6 +2407,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &615691728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 615691724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 960, y: 540}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
 --- !u!1 &616301492
 GameObject:
   m_ObjectHideFlags: 0
@@ -2807,8 +2823,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -20, y: -40}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: -20, y: -20}
+  m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &670787767
 MonoBehaviour:
@@ -4219,7 +4235,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 53183ef7622e44ee4a844d075808f464, type: 3}
-    m_FontSize: 24
+    m_FontSize: 26
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -4288,7 +4304,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -50, y: 0}
+  m_AnchoredPosition: {x: -70, y: 0}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1016821334
@@ -5583,7 +5599,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -300, y: -200}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1225994577
 MonoBehaviour:
@@ -6540,8 +6556,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -300, y: -150}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: -300, y: -120}
+  m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1442866428
 MonoBehaviour:
@@ -7501,10 +7517,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 53183ef7622e44ee4a844d075808f464, type: 3}
-    m_FontSize: 14
+    m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -8868,10 +8884,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 53183ef7622e44ee4a844d075808f464, type: 3}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
