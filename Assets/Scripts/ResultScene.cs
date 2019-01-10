@@ -4,6 +4,7 @@ using PlayFab.ClientModels;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Advertisements;
 
 public class ResultScene : MonoBehaviour
 {
@@ -21,16 +22,35 @@ public class ResultScene : MonoBehaviour
         text.text = string.Format("あなたのチャレンジ結果\n{0}回中{1}回成功\n所要時間{2:0.00}秒"
                                  , scoreManager.GameCount, score.ClearCount, score.TotalTimeOnClear);
         audioSource.clip = Resources.Load<AudioClip>("Audio/result");
-        audioSource.Play();
-
         leaderboardView.gameObject.SetActive(false);
-        StartCoroutine("GetLeaderboard", 0f);
+
+        if (Advertisement.IsReady())
+        {
+            var options = new ShowOptions
+            {
+                resultCallback = (_showResult) => {
+                    Debug.Log(_showResult);
+                    PlayResult();
+                },
+            };
+            Advertisement.Show(options);
+        }
+        else
+        {
+            PlayResult();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    void PlayResult()
+    {
+        audioSource.Play();
+        StartCoroutine("GetLeaderboard", 0f);
     }
 
     IEnumerator GetLeaderboard(float waitSeconds)
