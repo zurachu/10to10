@@ -57,4 +57,9 @@ public class TitleScene : MonoBehaviour
             view.Initialize(_leaderboard);
         });
     }
+
+    public void OnClickPrivacyPolicy()
+    {
+        Application.OpenURL("https://zurachu.github.io/10to10/privacy-policy.html");
+    }
 }
