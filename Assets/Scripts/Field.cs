@@ -42,10 +42,7 @@ public class Field : MonoBehaviour
             counter.transform.position = position;
             counters.Add(counter);
         }
-        if (OnCounterCreated != null)
-        {
-            OnCounterCreated(counters);
-        }
+        OnCounterCreated?.Invoke(counters);
 
         seconds = 0;
 
@@ -104,10 +101,7 @@ public class Field : MonoBehaviour
             var result = string.Format("{0}:{1}", _firstHalfCount, secondHalfCount);
             PlayFabPlayerEventManagerSingleton.Instance.RoundEnd(scoreManager.GameCount, cleared, seconds, result);
 
-            if (OnGameEnd != null)
-            {
-                OnGameEnd();
-            }
+            OnGameEnd?.Invoke();
         });
     }
 

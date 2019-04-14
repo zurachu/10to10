@@ -64,10 +64,7 @@ public class ChangeDisplayNameView : MonoBehaviour
         connectingView.Close();
         Close();
 
-        if (onChangeDisplayName != null)
-        {
-            onChangeDisplayName(displayNameInputField.text);
-        }
+        onChangeDisplayName?.Invoke(displayNameInputField.text);
     }
 
     void OnUpdateFailure(PlayFabError error)

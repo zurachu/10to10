@@ -19,21 +19,9 @@
         }
     }
 
-    public int MaxGameCount
-    {
-        get
-        {
-            return Score.MaxGameCount;
-        }
-    }
+    public int MaxGameCount => Score.MaxGameCount;
 
-    public int GameCount
-    {
-        get
-        {
-            return gameCount;
-        }
-    }
+    public int GameCount => gameCount;
 
     public Score Score
     {

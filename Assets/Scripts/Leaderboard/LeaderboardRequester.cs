@@ -23,10 +23,7 @@ public class LeaderboardRequester : MonoBehaviour
                 DebugLogLeaderboard(_result);
 
                 connectingView.Close();
-                if (onReceiveLeaderboard != null)
-                {
-                    onReceiveLeaderboard(_result.Leaderboard);
-                }
+                onReceiveLeaderboard?.Invoke(_result.Leaderboard);
             },
             _error => {
                 var report = _error.GenerateErrorReport();

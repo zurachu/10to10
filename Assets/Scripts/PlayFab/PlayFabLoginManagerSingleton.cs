@@ -23,31 +23,16 @@ public class PlayFabLoginManagerSingleton
         }
     }
 
-    public string PlayFabId
-    {
-        get
-        {
-            return result.PlayFabId;
-        }
-    }
+    public string PlayFabId => result.PlayFabId;
 
-    public bool LoggedIn
-    {
-        get
-        {
-            return result != null;
-        }
-    }
+    public bool LoggedIn => result != null;
 
     public void TryLogin(Action onSuccess, Action<string> onFailure)
     {
         // Inspector で設定
         if (string.IsNullOrEmpty(PlayFabSettings.TitleId))
         {
-            if (onFailure != null)
-            {
-                onFailure("PlayFabSettings.TitleId is not set");
-            }
+            onFailure?.Invoke("PlayFabSettings.TitleId is not set");
             return;
         }
 
@@ -55,19 +40,13 @@ public class PlayFabLoginManagerSingleton
         {
             Debug.Log(_result.PlayFabId);
             result = _result;
-            if (onSuccess != null)
-            {
-                onSuccess();
-            }
+            onSuccess?.Invoke();
         };
         Action<PlayFabError> errorCallback = _error =>
         {
             var report = _error.GenerateErrorReport();
             Debug.LogError(report);
-            if (onFailure != null)
-            {
-                onFailure(report);
-            }
+            onFailure?.Invoke(report);
         };
 
 #if !UNITY_EDITOR && UNITY_ANDROID

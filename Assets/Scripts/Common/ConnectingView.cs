@@ -4,13 +4,7 @@ using UnityEngine.UI;
 
 public class ConnectingView : MonoBehaviour
 {
-    public static GameObject Prefab
-    {
-        get
-        {
-            return Resources.Load<GameObject>("Prefabs/Common/ConnectingView");
-        }
-    }
+    public static GameObject Prefab => Resources.Load<GameObject>("Prefabs/Common/ConnectingView");
 
     public static ConnectingView Show()
     {

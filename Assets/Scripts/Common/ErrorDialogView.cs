@@ -4,13 +4,7 @@ using UnityEngine.UI;
 
 public class ErrorDialogView : MonoBehaviour
 {
-    public static GameObject Prefab
-    {
-        get
-        {
-            return Resources.Load<GameObject>("Prefabs/Common/ErrorDialogView");
-        }
-    }
+    public static GameObject Prefab => Resources.Load<GameObject>("Prefabs/Common/ErrorDialogView");
 
     public static ErrorDialogView Show(string title, string message, Action onClickRetry, bool cancelable = false)
     {

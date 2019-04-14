@@ -25,10 +25,7 @@ public class Border : MonoBehaviour
             }
         }
 
-        if (onCount != null)
-        {
-            onCount(firstHalfCount);
-        }
+        onCount?.Invoke(firstHalfCount);
     }
 
     protected virtual bool FirstHalfContains(SpriteRenderer counter)
