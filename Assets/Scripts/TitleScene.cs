@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
@@ -9,11 +10,19 @@ public class TitleScene : MonoBehaviour
     [SerializeField] TextMeshProUGUI startText;
     [SerializeField] LeaderboardRequester leaderoardRequester;
     [SerializeField] LeaderboardView leaderboardViewPrefab;
+    [SerializeField] GameObject privacyPolicyButton;
 
     // Use this for initialization
     void Start()
     {
         clickToStart.SetActive(false);
+
+#if UNITY_ANDROID || UNITY_IPHONE
+        privacyPolicyButton.SetActive(true);
+#else
+        privacyPolicyButton.SetActive(false);
+#endif
+
         PlayFabLoginManagerSingleton.Instance.TryLogin(OnLoginSuccess, OnLoginFailure);
     }
 
