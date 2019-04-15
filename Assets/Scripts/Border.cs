@@ -8,7 +8,7 @@ public class Border : MonoBehaviour
     {
     }
 
-    public void CheckResult(List<SpriteRenderer> counters, Action<int> onCount)
+    public int CheckResult(List<SpriteRenderer> counters)
     {
         var firstHalfCount = 0;
 
@@ -25,7 +25,7 @@ public class Border : MonoBehaviour
             }
         }
 
-        onCount?.Invoke(firstHalfCount);
+        return firstHalfCount;
     }
 
     protected virtual bool FirstHalfContains(SpriteRenderer counter)

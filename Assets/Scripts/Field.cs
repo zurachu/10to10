@@ -13,96 +13,101 @@ public class Field : MonoBehaviour
         Horizontal,
     }
 
+    public static readonly int NumHalfCounters = 10;
+    public static readonly int NumCounters = NumHalfCounters * 2;
+    public static readonly float CounterPositionRange = 4.5f;
+    public static readonly float CountersDistance = 1.0f;
+    public static readonly float HalfDistance = 0.5f;
+
     [SerializeField] SpriteRenderer counterPrefab;
     [SerializeField] Border verticalBorderPrefab;
     [SerializeField] Border horizontalBorderPrefab;
     [SerializeField] TextMeshProUGUI ratioText;
-    [SerializeField] TextMeshProUGUI timeText;
-    [SerializeField] TextMeshProUGUI roundText;
     [SerializeField] AudioSource audioSource;
 
-    public Action<List<SpriteRenderer>> OnCounterCreated;
-    public Action OnGameEnd;
+    public List<SpriteRenderer> Counters { get; private set; }
+    public float ElapsedSeconds { get; private set; }
+    public bool Playable;
 
     AudioClip missAudio;
     AudioClip rightAudio;
-    List<SpriteRenderer> counters;
     Border border;
-    bool clicked;
-    float seconds;
+    Action<bool, int> onResult;
 
     // Use this for initialization
     void Start()
     {
+        missAudio = Resources.Load<AudioClip>("Audio/mistake");
+        rightAudio = Resources.Load<AudioClip>("Audio/right2");
+    }
+
+    public void Initialize(BorderDirection direction, Action<bool, int> onResult)
+    {
+        this.onResult = onResult;
+
         var counterPositions = CreateCounterPositionList();
-        counters = new List<SpriteRenderer>();
+        Counters = new List<SpriteRenderer>();
         foreach (var position in counterPositions)
         {
             var counter = Instantiate(counterPrefab, transform);
             counter.transform.position = position;
-            counters.Add(counter);
+            Counters.Add(counter);
         }
-        OnCounterCreated?.Invoke(counters);
 
-        seconds = 0;
+        ElapsedSeconds = 0f;
+        Playable = true;
 
-        var scoreManager = ScoreManagerSingleton.Instance;
-        scoreManager.StartNewGame();
-        roundText.text = string.Format("Round\n{0}/{1}", scoreManager.GameCount, scoreManager.MaxGameCount);
+        SetBorderType(direction);
 
         audioSource.clip = Resources.Load<AudioClip>("Audio/countdown");
         audioSource.Play();
-
-        missAudio = Resources.Load<AudioClip>("Audio/mistake");
-        rightAudio = Resources.Load<AudioClip>("Audio/right2");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Counters == null || Counters.Count < NumCounters || border == null)
+        {
+            return;
+        }
+
         var mousePosition = Input.mousePosition;
-        mousePosition.z = 10.0f;
+        mousePosition.z = -Camera.main.transform.localPosition.z;
         var worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
-        if (!clicked)
+        if (Playable)
         {
-            seconds += Time.deltaTime;
-            timeText.text = seconds.ToString("F2");
+            ElapsedSeconds += Time.deltaTime;
 
             border.Move(worldPosition);
 
             if (Input.GetMouseButtonUp(0))
             {
-                Result(worldPosition);
-                clicked = true;
+                Playable = false;
+                Result();
             }
         }
     }
 
-    void Result(Vector3 mousePosition)
+    void Result()
     {
-        border.CheckResult(counters, (_firstHalfCount) => {
-            var scoreManager = ScoreManagerSingleton.Instance;
-            var secondHalfCount = counters.Count - _firstHalfCount;
-            ratioText.text = string.Format("<color=blue>{0}</color>:<color=red>{1}</color>", _firstHalfCount, secondHalfCount);
-            audioSource.Stop();
-            var cleared = (_firstHalfCount * 2 == counters.Count);
-            if (cleared)
-            {
-                scoreManager.ClearGame(seconds);
-                audioSource.PlayOneShot(rightAudio);
-            }
-            else
-            {
-                GetComponent<CinemachineImpulseSource>().GenerateImpulse();
-                audioSource.PlayOneShot(missAudio);
-            }
+        var firstHalfCount = border.CheckResult(Counters);
+        var secondHalfCount = Counters.Count - firstHalfCount;
+        ratioText.text = string.Format("<color=blue>{0}</color>:<color=red>{1}</color>", firstHalfCount, secondHalfCount);
 
-            var result = string.Format("{0}:{1}", _firstHalfCount, secondHalfCount);
-            PlayFabPlayerEventManagerSingleton.Instance.RoundEnd(scoreManager.GameCount, cleared, seconds, result);
+        audioSource.Stop();
+        var cleared = (firstHalfCount == NumHalfCounters);
+        if (cleared)
+        {
+            audioSource.PlayOneShot(rightAudio);
+        }
+        else
+        {
+            GetComponent<CinemachineImpulseSource>().GenerateImpulse();
+            audioSource.PlayOneShot(missAudio);
+        }
 
-            OnGameEnd?.Invoke();
-        });
+        onResult?.Invoke(cleared, firstHalfCount);
     }
 
     List<Vector3> CreateCounterPositionList()
@@ -110,32 +115,29 @@ public class Field : MonoBehaviour
         while (true)
         {
             var positions = new List<Vector3>();
-            for (var i = 0; i < 10 * 2; i++)
+            for (var i = 0; i < NumCounters; i++)
             {
                 Vector3 position;
                 do
                 {
-                    position = new Vector3(UnityEngine.Random.Range(-4.5f, 4.5f), UnityEngine.Random.Range(-4.5f, 4.5f));
-                } while (positions.Any(_position => Vector3.Distance(position, _position) < 1.0f));
+                    var x = UnityEngine.Random.Range(-CounterPositionRange, CounterPositionRange);
+                    var y = UnityEngine.Random.Range(-CounterPositionRange, CounterPositionRange);
+                    position = new Vector3(x, y);
+                } while (positions.Any(_position => Vector3.Distance(position, _position) < CountersDistance));
                 positions.Add(position);
             }
             var orderByX = positions.OrderBy(_position => _position.x).ToArray();
             var orderByY = positions.OrderBy(_position => _position.y).ToArray();
-            if (Mathf.Abs(orderByX[10 - 1].x - orderByX[10].x) > 0.5f
-                && Mathf.Abs(orderByY[10 - 1].y - orderByY[10].y) > 0.5f)
+            if (Mathf.Abs(orderByX[NumHalfCounters - 1].x - orderByX[NumHalfCounters].x) > HalfDistance
+                && Mathf.Abs(orderByY[NumHalfCounters - 1].y - orderByY[NumHalfCounters].y) > HalfDistance)
             {
                 return positions;
             }
         }
     }
 
-    public void SetBorderType(BorderDirection direction)
+    void SetBorderType(BorderDirection direction)
     {
-        if (border != null)
-        {
-            Destroy(border.gameObject);
-        }
-
         switch (direction)
         {
             case BorderDirection.Vertical:

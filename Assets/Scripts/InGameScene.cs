@@ -5,10 +5,13 @@ using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class InGameScene : MonoBehaviour
 {
     [SerializeField] Field fieldPrefab;
+    [SerializeField] TextMeshProUGUI timeText;
+    [SerializeField] TextMeshProUGUI roundText;
 
     Field field;
 
@@ -22,6 +25,10 @@ public class InGameScene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (field != null)
+        {
+            timeText.text = field.ElapsedSeconds.ToString("F2");
+        }
     }
 
     void StartNewGame()
@@ -32,7 +39,9 @@ public class InGameScene : MonoBehaviour
         }
         field = Instantiate(fieldPrefab);
 
-        var gameCount = ScoreManagerSingleton.Instance.GameCount;
+        var scoreManager = ScoreManagerSingleton.Instance;
+        var gameCount = scoreManager.GameCount;
+
         var borderType = Field.BorderDirection.Vertical;
         if (gameCount < 3)
         {
@@ -46,42 +55,17 @@ public class InGameScene : MonoBehaviour
         {
             borderType = ((gameCount % 2 == 0) ? Field.BorderDirection.Vertical : Field.BorderDirection.Horizontal);
         }
-        field.SetBorderType(borderType);
 
-        field.OnCounterCreated = (_counters) => {
-            if (8 <= gameCount)
+        field.Initialize(borderType, (_cleared, _firstHalfCount) => {
+            if (_cleared)
             {
-                var counters = new List<SpriteRenderer>();
-                switch (borderType)
-                {
-                    case Field.BorderDirection.Vertical:
-                        counters = _counters.OrderBy(_counter => _counter.transform.position.x).ToList();
-                        break;
-
-                    case Field.BorderDirection.Horizontal:
-                        counters = _counters.OrderByDescending(_counter => _counter.transform.position.y).ToList();
-                        break;
-                }
-                var candidates = new int[] { 7, 8, 9, 11, 12, 13 };
-                var count = candidates[Random.Range(0, candidates.Length)];
-                var index = 0;
-                foreach (var counter in counters)
-                {
-                    if (index < count)
-                    {
-                        counter.color = new Color(0.75f, 0.75f, 1.0f);
-                    }
-                    else
-                    {
-                        counter.color = new Color(1.0f, 0.75f, 0.75f);
-                    }
-                    index++;
-                }
+                scoreManager.ClearGame(field.ElapsedSeconds);
             }
-        };
 
-        field.OnGameEnd = () => {
-            var scoreManager = ScoreManagerSingleton.Instance;
+            var secondHalfCount = Field.NumCounters - _firstHalfCount;
+            var result = string.Format("{0}:{1}", _firstHalfCount, secondHalfCount);
+            PlayFabPlayerEventManagerSingleton.Instance.RoundEnd(scoreManager.GameCount, _cleared, field.ElapsedSeconds, result);
+
             if (scoreManager.GameCount < scoreManager.MaxGameCount)
             {
                 StartCoroutine("WaitAndNextGame");
@@ -90,7 +74,41 @@ public class InGameScene : MonoBehaviour
             {
                 UpdatePlayerStatistics(scoreManager.Score);
             }
-        };
+        });
+
+        if (8 <= gameCount)
+        {
+            var counters = new List<SpriteRenderer>();
+            switch (borderType)
+            {
+                case Field.BorderDirection.Vertical:
+                    counters = field.Counters.OrderBy(_counter => _counter.transform.position.x).ToList();
+                    break;
+
+                case Field.BorderDirection.Horizontal:
+                    counters = field.Counters.OrderByDescending(_counter => _counter.transform.position.y).ToList();
+                    break;
+            }
+            var candidates = new int[] { 7, 8, 9, 11, 12, 13 };
+            var count = candidates[Random.Range(0, candidates.Length)];
+            var index = 0;
+            foreach (var counter in counters)
+            {
+                if (index < count)
+                {
+                    counter.color = new Color(0.75f, 0.75f, 1.0f);
+                }
+                else
+                {
+                    counter.color = new Color(1.0f, 0.75f, 0.75f);
+                }
+                index++;
+            }
+        }
+
+        scoreManager.StartNewGame();
+        roundText.text = string.Format("Round\n{0}/{1}", scoreManager.GameCount, scoreManager.MaxGameCount);
+        timeText.text = field.ElapsedSeconds.ToString("F2");
     }
 
     IEnumerator WaitAndNextGame()
