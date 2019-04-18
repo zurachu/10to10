@@ -12,6 +12,7 @@ public class InGameScene : MonoBehaviour
     [SerializeField] Field fieldPrefab;
     [SerializeField] TextMeshProUGUI timeText;
     [SerializeField] TextMeshProUGUI roundText;
+    [SerializeField] TextMeshProUGUI readyText;
 
     Field field;
 
@@ -19,7 +20,7 @@ public class InGameScene : MonoBehaviour
     void Start()
     {
         ScoreManagerSingleton.Instance.Initialize();
-        StartNewGame();
+        Invoke("StartNewGame", 1f);
     }
 
     // Update is called once per frame
@@ -33,6 +34,8 @@ public class InGameScene : MonoBehaviour
 
     void StartNewGame()
     {
+        readyText.gameObject.SetActive(false);
+
         if (field != null)
         {
             Destroy(field.gameObject);
@@ -68,7 +71,7 @@ public class InGameScene : MonoBehaviour
 
             if (scoreManager.GameCount < scoreManager.MaxGameCount)
             {
-                StartCoroutine("WaitAndNextGame");
+                Invoke("StartNewGame", 1f);
             }
             else
             {
@@ -109,12 +112,6 @@ public class InGameScene : MonoBehaviour
         scoreManager.StartNewGame();
         roundText.text = string.Format("Round\n{0}/{1}", scoreManager.GameCount, scoreManager.MaxGameCount);
         timeText.text = field.ElapsedSeconds.ToString("F2");
-    }
-
-    IEnumerator WaitAndNextGame()
-    {
-        yield return new WaitForSeconds(1f);
-        StartNewGame();
     }
 
     void UpdatePlayerStatistics(Score score)
