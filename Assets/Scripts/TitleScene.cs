@@ -56,7 +56,7 @@ public class TitleScene : MonoBehaviour
 
     public void OnClick()
     {
-        SceneManager.LoadScene("InGameScene");
+        SceneManager.LoadScene("Try10Scene");
     }
 
     public void OnClickLeaderboard()
