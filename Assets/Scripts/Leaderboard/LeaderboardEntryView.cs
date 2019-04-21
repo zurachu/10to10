@@ -17,7 +17,7 @@ public class LeaderboardEntryView : MonoBehaviour
         defaultBackground.SetActive(!isMyEntry);
         playerBackground.SetActive(isMyEntry);
 
-        var score = Score.FromStatistic(entry.StatValue);
+        var score = Score.Try10Score.FromStatistic(entry.StatValue);
         rank.text = (entry.Position + 1).ToString();
         playerName.text = entry.DisplayName;
         clearCount.text = score.ClearCount.ToString();

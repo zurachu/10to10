@@ -34,6 +34,7 @@ public class InGameScene : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        ScoreManagerSingleton.Instance.Initialize();
         Initialize();
         Invoke("ReadyFirstGame", 1f);
     }

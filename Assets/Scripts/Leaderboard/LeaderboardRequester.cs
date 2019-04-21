@@ -15,7 +15,7 @@ public class LeaderboardRequester : MonoBehaviour
 
         var request = new GetLeaderboardRequest {
             MaxResultsCount = MaxEntriesCount,
-            StatisticName = Score.StatisticName,
+            StatisticName = Score.Try10Score.StatisticName,
         };
         PlayFabClientAPI.GetLeaderboard(
             request,

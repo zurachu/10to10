@@ -2,8 +2,8 @@
 {
     static ScoreManagerSingleton instance;
 
-    int gameCount;
-    Score score;
+    public int GameCount { get; private set; }
+
     int clearCount;
     float totalTimeOnClear;
 
@@ -19,36 +19,23 @@
         }
     }
 
-    public int MaxGameCount => Score.MaxGameCount;
-
-    public int GameCount => gameCount;
-
-    public Score Score
-    {
-        get
-        {
-            if (score == null)
-            {
-                score = new Score();
-            }
-            return score;
-        }
-    }
+    public Score.Try10Score Try10Score => new Score.Try10Score(clearCount, totalTimeOnClear);
 
     public void Initialize()
     {
-        gameCount = 0;
-        score = new Score();
+        GameCount = 0;
+        clearCount = 0;
+        totalTimeOnClear = 0f;
     }
 
     public void StartNewGame()
     {
-        gameCount++;
+        GameCount++;
     }
 
     public void ClearGame(float time)
     {
-        score.ClearCount++;
-        score.TotalTimeOnClear += time;
+        clearCount++;
+        totalTimeOnClear += time;
     }
 }

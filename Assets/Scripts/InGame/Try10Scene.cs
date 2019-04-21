@@ -24,9 +24,8 @@ namespace InGame
 
         protected override void Initialize()
         {
-            var scoreManager = ScoreManagerSingleton.Instance;
-            scoreManager.Initialize();
-            RoundText = string.Format("Round\n{0}/{1}", scoreManager.GameCount, scoreManager.MaxGameCount);
+            var gameCount = 1;
+            RoundText = string.Format("Round\n{0}/{1}", gameCount, Score.Try10Score.MaxGameCount);
             var seconds = 0f;
             TimeText = seconds.ToString("F2");
         }
@@ -67,7 +66,7 @@ namespace InGame
             }
 
             scoreManager.StartNewGame();
-            RoundText = string.Format("Round\n{0}/{1}", scoreManager.GameCount, scoreManager.MaxGameCount);
+            RoundText = string.Format("Round\n{0}/{1}", scoreManager.GameCount, Score.Try10Score.MaxGameCount);
             TimeText = field.ElapsedSeconds.ToString("F2");
         }
 
@@ -79,14 +78,14 @@ namespace InGame
                 scoreManager.ClearGame(field.ElapsedSeconds);
             }
 
-            if (scoreManager.GameCount < scoreManager.MaxGameCount)
+            if (scoreManager.GameCount < Score.Try10Score.MaxGameCount)
             {
                 Invoke("ReadyNewGame", 1f);
             }
             else
             {
-                var score = scoreManager.Score;
-                statisticRequester.Request(Score.StatisticName, score.StatisticValue, () => {
+                var score = scoreManager.Try10Score;
+                statisticRequester.Request(Score.Try10Score.StatisticName, score.StatisticValue, () => {
                     Invoke("LoadResultScene", 1f);
                 });
             }

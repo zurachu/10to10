@@ -13,12 +13,14 @@ public class ResultScene : MonoBehaviour
     [SerializeField] LeaderboardRequester leaderboardRequester;
     [SerializeField] LeaderboardView leaderboardView;
 
+    Score.Try10Score score;
+
     // Use this for initialization
     void Start()
     {
         var scoreManager = ScoreManagerSingleton.Instance;
         // 所要時間の最下位桁の切り上げ切り捨てがハイスコア登録と一致するよう、一旦ハイスコア登録の形式に変換する
-        var score = Score.FromStatistic(scoreManager.Score.StatisticValue);
+        score = Score.Try10Score.FromStatistic(scoreManager.Try10Score.StatisticValue);
         text.text = string.Format("あなたのチャレンジ結果\n{0}回中{1}回成功\n所要時間{2:0.00}秒"
                                  , scoreManager.GameCount, score.ClearCount, score.TotalTimeOnClear);
         audioSource.clip = Resources.Load<AudioClip>("Audio/result");
@@ -64,7 +66,7 @@ public class ResultScene : MonoBehaviour
 
     void SetupLeaderboard(List<PlayerLeaderboardEntry> leaderboardEntries)
     {
-        var statisticValue = ScoreManagerSingleton.Instance.Score.StatisticValue;
+        var statisticValue = score.StatisticValue;
         var myEntry = leaderboardEntries.Find(_entry => _entry.PlayFabId == PlayFabLoginManagerSingleton.Instance.PlayFabId);
         if (myEntry != null && myEntry.StatValue < statisticValue
             || myEntry == null && leaderboardEntries.Count < LeaderboardRequester.MaxEntriesCount
@@ -88,7 +90,6 @@ public class ResultScene : MonoBehaviour
     {
         var scoreManager = ScoreManagerSingleton.Instance;
         // Start() と同様
-        var score = Score.FromStatistic(scoreManager.Score.StatisticValue);
         var message = string.Format("10:10 あなたのチャレンジ結果は{0}回中{1}回成功、所要時間{2:0.00}秒でした"
                                     , scoreManager.GameCount, score.ClearCount, score.TotalTimeOnClear);
 #if UNITY_WEBGL
