@@ -11,6 +11,8 @@ namespace InGame
 {
     public class Try10Scene : InGameScene
     {
+        [SerializeField] UpdatePlayerStatisticRequester statisticRequester;
+
         // Update is called once per frame
         void Update()
         {
@@ -22,7 +24,11 @@ namespace InGame
 
         protected override void Initialize()
         {
-            ScoreManagerSingleton.Instance.Initialize();
+            var scoreManager = ScoreManagerSingleton.Instance;
+            scoreManager.Initialize();
+            RoundText = string.Format("Round\n{0}/{1}", scoreManager.GameCount, scoreManager.MaxGameCount);
+            var seconds = 0f;
+            TimeText = seconds.ToString("F2");
         }
 
         protected override void StartNewGame()
@@ -73,17 +79,16 @@ namespace InGame
                 scoreManager.ClearGame(field.ElapsedSeconds);
             }
 
-            var secondHalfCount = Field.NumCounters - firstHalfCount;
-            var result = string.Format("{0}:{1}", firstHalfCount, secondHalfCount);
-            PlayFabPlayerEventManagerSingleton.Instance.RoundEnd(scoreManager.GameCount, cleared, field.ElapsedSeconds, result);
-
             if (scoreManager.GameCount < scoreManager.MaxGameCount)
             {
                 Invoke("ReadyNewGame", 1f);
             }
             else
             {
-                UpdatePlayerStatistics(scoreManager.Score);
+                var score = scoreManager.Score;
+                statisticRequester.Request(Score.StatisticName, score.StatisticValue, () => {
+                    Invoke("LoadResultScene", 1f);
+                });
             }
         }
 
@@ -114,7 +119,7 @@ namespace InGame
             }
         }
 
-        protected override void LoadResultScene()
+        void LoadResultScene()
         {
             SceneManager.LoadScene("ResultScene");
         }

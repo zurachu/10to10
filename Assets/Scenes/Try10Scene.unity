@@ -134,6 +134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 470337091}
   - component: {fileID: 470337092}
+  - component: {fileID: 470337093}
   m_Layer: 0
   m_Name: InGameScene
   m_TagString: Untagged
@@ -172,6 +173,19 @@ MonoBehaviour:
   timeText: {fileID: 1905251536}
   roundText: {fileID: 1930411936}
   readyText: {fileID: 71855752}
+  statisticRequester: {fileID: 470337093}
+--- !u!114 &470337093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 470337090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e6d3b103c254451b89f6278a2dc799a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1905251536 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6547171562938052373, guid: 4f3e9d621279b44b09f6ce3e701dd667,

@@ -76,40 +76,4 @@ public class InGameScene : MonoBehaviour
 
         StartNewGame();
     }
-
-    protected void UpdatePlayerStatistics(Score score)
-    {
-        var request = new UpdatePlayerStatisticsRequest {
-            Statistics = new List<StatisticUpdate>() {
-                new StatisticUpdate {
-                    StatisticName = Score.StatisticName,
-                    Value = score.StatisticValue
-                }
-            }
-        };
-        PlayFabClientAPI.UpdatePlayerStatistics(request, OnUpdateSuccess, OnUpdateFailure);
-    }
-
-    void OnUpdateSuccess(UpdatePlayerStatisticsResult result)
-    {
-        var request = result.Request as UpdatePlayerStatisticsRequest;
-        var statisticUpdate = request.Statistics[0];
-        Debug.Log(string.Format("{0}:{1}:{2}", statisticUpdate.StatisticName, statisticUpdate.Version, statisticUpdate.Value));
-
-        Invoke("LoadResultScene", 1f);
-    }
-
-    void OnUpdateFailure(PlayFabError error)
-    {
-        var report = error.GenerateErrorReport();
-        Debug.LogError(report);
-
-        ErrorDialogView.Show("UpdatePlayerStatistics failed", report, () => {
-            UpdatePlayerStatistics(ScoreManagerSingleton.Instance.Score);
-        });
-    }
-
-    protected virtual void LoadResultScene()
-    {
-    }
 }
