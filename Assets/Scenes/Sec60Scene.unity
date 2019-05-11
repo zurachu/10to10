@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 470337092}
   - component: {fileID: 470337093}
   m_Layer: 0
-  m_Name: Try10Scene
+  m_Name: Sec60Scene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 470337090}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e26b9977b5f7046458715d23c6cc2afe, type: 3}
+  m_Script: {fileID: 11500000, guid: 8816afb7ba1b54810ae71ee7beb7ed9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fieldPrefab: {fileID: 114407599998618482, guid: fe085d7bac9974d9d868c61b83bb6c97,

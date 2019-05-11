@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Try10Scene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
+    path: Assets/Scenes/Sec60Scene.unity
+    guid: 13ce012af322e426389c5cf21120eb42
+  - enabled: 1
     path: Assets/Scenes/ResultScene.unity
     guid: c2cd24bc2e3a64ed182e927d7163b888
   m_configObjects: {}
