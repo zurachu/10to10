@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class TitleScene : MonoBehaviour
 {
     [SerializeField] GameObject clickToStart;
+    [SerializeField] GameObject modeSelection;
     [SerializeField] TextMeshProUGUI startText;
     [SerializeField] LeaderboardRequester leaderoardRequester;
     [SerializeField] LeaderboardView leaderboardViewPrefab;
@@ -16,6 +17,7 @@ public class TitleScene : MonoBehaviour
     void Start()
     {
         clickToStart.SetActive(false);
+        modeSelection.SetActive(false);
 
 #if UNITY_ANDROID || UNITY_IPHONE
         privacyPolicyButton.SetActive(true);
@@ -54,9 +56,20 @@ public class TitleScene : MonoBehaviour
         }
     }
 
-    public void OnClick()
+    public void OnClickToModeSelection()
+    {
+        clickToStart.SetActive(false);
+        modeSelection.SetActive(true);
+    }
+
+    public void OnClickTry10()
     {
         SceneManager.LoadScene("Try10Scene");
+    }
+
+    public void OnClickSec60()
+    {
+        SceneManager.LoadScene("Sec60Scene");
     }
 
     public void OnClickLeaderboard()
