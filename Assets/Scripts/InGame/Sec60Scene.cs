@@ -26,7 +26,7 @@ namespace InGame
                 if (restTime <= 0f)
                 {
                     restTime = 0f;
-                    field.Playable = false;
+                    field.ForceMiss();
                     Invoke("TimeUp", 1f); // 時間切れでもbooを鳴らしたい
                 }
 

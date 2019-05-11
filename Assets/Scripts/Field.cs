@@ -27,7 +27,7 @@ public class Field : MonoBehaviour
 
     public List<SpriteRenderer> Counters { get; private set; }
     public float ElapsedSeconds { get; private set; }
-    public bool Playable;
+    public bool Playable { get; private set; }
 
     AudioClip missAudio;
     AudioClip rightAudio;
@@ -83,7 +83,6 @@ public class Field : MonoBehaviour
 
             if (Input.GetMouseButtonUp(0))
             {
-                Playable = false;
                 Result();
             }
         }
@@ -91,6 +90,8 @@ public class Field : MonoBehaviour
 
     void Result()
     {
+        Playable = false;
+
         var firstHalfCount = border.CheckResult(Counters);
         var secondHalfCount = Counters.Count - firstHalfCount;
         ratioText.text = string.Format("<color=blue>{0}</color>:<color=red>{1}</color>", firstHalfCount, secondHalfCount);
@@ -108,6 +109,14 @@ public class Field : MonoBehaviour
         }
 
         onResult?.Invoke(cleared, firstHalfCount);
+    }
+
+    public void ForceMiss()
+    {
+        Playable = false;
+        audioSource.Stop();
+        GetComponent<CinemachineImpulseSource>().GenerateImpulse();
+        audioSource.PlayOneShot(missAudio);
     }
 
     List<Vector3> CreateCounterPositionList()
