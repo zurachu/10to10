@@ -21,6 +21,8 @@
 
     public Score.Try10Score Try10Score => new Score.Try10Score(clearCount, totalTimeOnClear);
 
+    public Score.Sec60Score Sec60Score => new Score.Sec60Score(clearCount);
+
     public void Initialize()
     {
         GameCount = 0;

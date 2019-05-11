@@ -27,7 +27,7 @@ namespace InGame
                 {
                     restTime = 0f;
                     field.ForceMiss();
-                    Invoke("TimeUp", 1f); // 時間切れでもbooを鳴らしたい
+                    TimeUp();
                 }
 
                 TimeText = restTime.ToString("F2");
@@ -48,7 +48,7 @@ namespace InGame
             var gameCount = scoreManager.GameCount;
 
             scoreManager.StartNewGame();
-            RoundText = string.Format("Round {0}", scoreManager.GameCount);
+            RoundText = string.Format("Round {0}", gameCount);
         }
 
         protected override void OnGameResult(bool cleared, int firstHalfCount)
@@ -67,7 +67,14 @@ namespace InGame
 
             TimeText = restTimeOnStartGame.ToString("F2");
 
-            Invoke((restTimeOnStartGame <= 0f) ? "TimeUp" : "ReadyNewGame", 1f);
+            if (restTimeOnStartGame > 0f)
+            {
+                Invoke("ReadyNewGame", 1f);
+            }
+            else
+            {
+                TimeUp();
+            }
         }
 
         protected override Field.BorderDirection BorderDirection
@@ -80,7 +87,10 @@ namespace InGame
 
         void TimeUp()
         {
-            LoadResultScene();
+            var score = ScoreManagerSingleton.Instance.Sec60Score;
+            statisticRequester.Request(Score.Sec60Score.StatisticName, score.StatisticValue, () => {
+                Invoke("LoadResultScene", 1f);
+            });
         }
 
         void LoadResultScene()
